@@ -1,10 +1,11 @@
 import FormContact from "./layout/FormContact/FormContact";
 import TableContact from "./layout/TableContact/TableContact";
 import React, { useState } from "react";
+import axios from 'axios';
 
 const App = () => {
   const addContact = (contactName, contactEmail) => {
-    const newId = Math.max(...contacts.map(e => e.id)) + 1
+    const newId = contacts.length > 0 ? Math.max(...contacts.map(e => e.id)) + 1 : 1
     const item = {
       id: newId,
       name: contactName,
@@ -12,6 +13,10 @@ const App = () => {
     };
     setContacts([...contacts, item]);
 
+  }
+
+  const deleteContact = (id) => {
+    setContacts(contacts.filter(item => item.id != id));
   }
 
   const [contacts, setContacts] = useState([
@@ -26,7 +31,8 @@ const App = () => {
           <h1>Список контактов</h1>
         </div>
         <div className="card-body">
-          <TableContact contacts={contacts} />
+          <TableContact contacts={contacts}
+            deleteContact={deleteContact} />
           <FormContact addContact={addContact} />
 
         </div>
