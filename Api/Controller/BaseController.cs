@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-class BaseController : ControllerBase
+public class BaseController : ControllerBase
 {
 
 }

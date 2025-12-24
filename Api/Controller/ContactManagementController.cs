@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-class ContactManagementController : BaseController
+public class ContactManagementController : BaseController
 {
     private ContactStorage contactStorage;
 

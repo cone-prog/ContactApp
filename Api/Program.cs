@@ -7,12 +7,10 @@ builder.Services.AddSingleton<DataContext>();
 builder.Services.AddSingleton<ContactStorage>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.MapControllers();
 
 app.Run();
