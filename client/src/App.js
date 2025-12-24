@@ -3,8 +3,9 @@ import React, { useState } from "react";
 
 const App = () => {
   const addContact = () => {
+    const newId = Math.max(...contacts.map(e => e.id)) + 1
     const item = {
-      id: 1,
+      id: newId,
       name: "21423",
       email: "24234"
     };
@@ -14,8 +15,8 @@ const App = () => {
 
   const [contacts, setContacts] = useState([
     { id: 1, name: "sdfsdf", email: "fsfsdfsfdf" },
-    { id: 1, name: "sdfsdf", email: "fsfsdfsfdf" },
-    { id: 1, name: "sdfsdf", email: "fsfsdfsfdf" }
+    { id: 2, name: "sdfsdf", email: "fsfsdfsfdf" },
+    { id: 3, name: "sdfsdf", email: "fsfsdfsfdf" }
   ]);
   return (
     <div className="container mt-5">
