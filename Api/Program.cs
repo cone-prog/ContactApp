@@ -5,9 +5,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddSingleton<DataContext>();
 builder.Services.AddSingleton<ContactStorage>();
+builder.Services.AddCors(opt =>
+opt.AddPolicy("CorsPolicy", policy =>
+{
+    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+})
+);
+
 var app = builder.Build();
 
-
+app.UseCors("CorsPolicy");
 app.UseSwagger();
 app.UseSwaggerUI();
 
