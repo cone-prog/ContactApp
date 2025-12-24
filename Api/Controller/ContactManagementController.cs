@@ -2,56 +2,53 @@ using Microsoft.AspNetCore.Mvc;
 
 public class ContactManagementController : BaseController
 {
-    private ContactStorage contactStorage;
+    private readonly ContactStorage storage;
 
-    public ContactManagementController(ContactStorage contactStorage)
+    public ContactManagementController(ContactStorage storage)
     {
-        this.contactStorage = contactStorage;
+        this.storage = storage;
     }
 
     [HttpPost("contacts")]
-    public void Create([FromBody] Contact contact)
+    public IActionResult Create([FromBody] Contact contact)
     {
-        contactStorage.contacts.Add(contact);
+        if (!storage.Add(contact))
+            return Conflict("Контакт с таким ID уже существует!");
+
+        return Created($"/contacts/{contact.Id}", contact);
     }
 
     [HttpGet("contacts")]
-    public List<Contact> GetContacts()
+    public ActionResult<List<Contact>> GetContacts()
     {
-        return contactStorage.contacts;
+        return Ok(storage.GetContacts());
     }
 
     [HttpDelete("contacts/{id}")]
-    public void DeleteContact(int id)
+    public IActionResult DeleteContact(int id)
     {
-        Contact contact;
-        for (int i = 0; i < contactStorage.contacts.Count(); i++)
-        {
-            if (i == contactStorage.contacts[i].Id)
-            {
-                contact = contactStorage.contacts[i];
-                contactStorage.contacts.Remove(contact);
-                return;
-            }
-        }
+        bool res = storage.Remove(id);
+        if (res) return NoContent();
+        return BadRequest("Ошибка id");
     }
 
     [HttpPut("contacts/{id}")]
-    public void UpdateContacr(int id, [FromBody] ContactDto contactDto)
+    public IActionResult UpdateContact([FromBody] ContactDto contactDto, int id)
     {
-        Contact contact;
-        for (int i = 0; i < contactStorage.contacts.Count(); i++)
-        {
-            if (i == contactStorage.contacts[i].Id)
-            {
-                contact = contactStorage.contacts[i];
-                if (!String.IsNullOrEmpty(contactDto.Email))
-                    contact.Email = contactDto.Email;
-                if (!String.IsNullOrEmpty(contactDto.Name))
-                    contact.Name = contactDto.Name;
-                return;
-            }
-        }
+        bool res = storage.UpdateContact(contactDto, id);
+        if (res) return Ok();
+        return Conflict("Контакт с указанным ID не нашёлся");
     }
+    [HttpGet("contacts/{id}")]
+    public ActionResult<Contact> GetContact(int id)
+    {
+        if (id <= 0)
+            return BadRequest("Некорректный id");
+        var contact = storage.GetContactById(id);
+        if (contact is null)
+            return NotFound($"Контакт с ID {id} не найден.");
+        return Ok(contact);
+    }
+
 
 }
