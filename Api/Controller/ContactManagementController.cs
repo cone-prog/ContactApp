@@ -20,4 +20,19 @@ class ContactManagementController : BaseController
     {
         return contactStorage.contacts;
     }
+
+    [HttpDelete("contacts/{id}")]
+    public void DeleteContact(int id)
+    {
+        Contact contact;
+        for (int i = 0; i < contactStorage.contacts.Count(); i++)
+        {
+            if (i == contactStorage.contacts[i].Id)
+            {
+                contact = contactStorage.contacts[i];
+                contactStorage.contacts.Remove(contact);
+                return;
+            }
+        }
+    }
 }
