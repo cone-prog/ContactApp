@@ -35,4 +35,23 @@ public class ContactManagementController : BaseController
             }
         }
     }
+
+    [HttpPut("contacts/{id}")]
+    public void UpdateContacr(int id, [FromBody] ContactDto contactDto)
+    {
+        Contact contact;
+        for (int i = 0; i < contactStorage.contacts.Count(); i++)
+        {
+            if (i == contactStorage.contacts[i].Id)
+            {
+                contact = contactStorage.contacts[i];
+                if (!String.IsNullOrEmpty(contactDto.Email))
+                    contact.Email = contactDto.Email;
+                if (!String.IsNullOrEmpty(contactDto.Name))
+                    contact.Name = contactDto.Name;
+                return;
+            }
+        }
+    }
+
 }
