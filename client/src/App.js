@@ -1,9 +1,15 @@
 import FormContact from "./layout/FormContact/FormContact";
 import TableContact from "./layout/TableContact/TableContact";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
+const baseApiUrl = process.env.REACT_APP_API_URL;
+
 const App = () => {
+  const url = `${baseApiUrl}/contacts`;
+  useEffect(() => {
+    axios.get(url).then(res => setContacts(res.data))
+  })
   const addContact = (contactName, contactEmail) => {
     const newId = contacts.length > 0 ? Math.max(...contacts.map(e => e.id)) + 1 : 1
     const item = {
@@ -16,14 +22,10 @@ const App = () => {
   }
 
   const deleteContact = (id) => {
-    setContacts(contacts.filter(item => item.id != id));
+    setContacts(contacts.filter(item => item.id !== id));
   }
 
-  const [contacts, setContacts] = useState([
-    { id: 1, name: "sdfsdf", email: "fsfsdfsfdf" },
-    { id: 2, name: "sdfsdf", email: "fsfsdfsfdf" },
-    { id: 3, name: "sdfsdf", email: "fsfsdfsfdf" }
-  ]);
+  const [contacts, setContacts] = useState([]);
   return (
     <div className="container mt-5">
       <div className="card">
