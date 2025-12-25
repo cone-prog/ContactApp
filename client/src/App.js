@@ -12,11 +12,13 @@ const App = () => {
   })
   const addContact = (contactName, contactEmail) => {
     const newId = contacts.length > 0 ? Math.max(...contacts.map(e => e.id)) + 1 : 1
+
     const item = {
       id: newId,
       name: contactName,
       email: contactEmail
     };
+    axios.post(url, item);
     setContacts([...contacts, item]);
 
   }
